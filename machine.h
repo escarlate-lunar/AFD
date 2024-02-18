@@ -6,9 +6,9 @@
 
 struct transition
 {
-    state initial_state;
+    int initial_state;
     char symbol;
-    state final_state;
+    int final_state;
 };
 
 class machine
@@ -16,7 +16,7 @@ class machine
     std::string alphabet_;
     state current_state_;
     std::list<state> states_;
-    std::list<::transition> transitions_;
+    std::list<transition> transitions_;
 
 public:
     machine(std::list<state> states, const std::string& alphabet, const std::list<transition>& transitions);

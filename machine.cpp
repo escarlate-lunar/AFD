@@ -4,7 +4,7 @@
 #include <utility>
 
 machine::machine(std::list<state> states, const std::string& alphabet, const std::list<transition>& transitions):
-    current_state_(NULL, NULL)
+    current_state_(NULL, NULL) //initializing variable
 {
     alphabet_ = alphabet;
     current_state_ = states.front();
@@ -14,8 +14,13 @@ machine::machine(std::list<state> states, const std::string& alphabet, const std
 
 bool machine::check_word(const std::string& word)
 {
-    for (const auto symbol : word)
+    for (char symbol : word)
     {
+        if (alphabet_.find(symbol) == std::string::npos)
+        {
+            return false;
+        }
+        
         if (transition_function(symbol) == false)
         {
             return false;
@@ -32,12 +37,25 @@ bool machine::check_word(const std::string& word)
 
 bool machine::transition_function(const char symbol)
 {
-    for (auto element : transitions_)
+    for (transition element : transitions_)
     {
-        if (element.initial_state.get_identifier() == current_state_.get_identifier() && element.symbol == symbol)
+        if (element.initial_state == current_state_.get_identifier() && element.symbol == symbol)
         {
-            current_state_ = element.final_state;
+            /*
+            TODO: return final state to current state
+             
+            auto it = std::find(states_.begin(), states_.end(), [element, this](const state s)
+            {
+                if (s.get_identifier() == element.final_state)
+                {
+                    return s;     
+                }
+            });
+
+            current_state
+            
             return true;
+            */
         }
     }
 

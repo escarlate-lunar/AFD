@@ -6,7 +6,7 @@ class state
     bool is_final_;
     
 public:
-    state(const int identifier, const bool is_final);
+    state(int identifier, bool is_final);
     int get_identifier() const;
     bool get_is_final() const;
 };
