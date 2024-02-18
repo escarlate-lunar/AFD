@@ -1,17 +1,18 @@
 #include <algorithm>
 #include <array>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <list>
 #include <string>
 
 #include "machine.h"
 
+
 int main()
 {
-    std::ifstream finite_state_machine1("");
-    std::ifstream finite_state_machine2("");
-    std::ifstream finite_state_machine3("");
+    std::ifstream finite_state_machine1("automata1.txt");
+    std::ifstream finite_state_machine2("automata2.txt");
+    std::ifstream finite_state_machine3("automata3.txt");
 
     std::array<std::ifstream, 3> fsm_list =
     {
@@ -22,6 +23,12 @@ int main()
 
     for (auto& state_machine : fsm_list)
     {
+        if (!state_machine.is_open())
+        {
+            std::cerr << "Failed to open file" << '\n';
+            continue;
+        }
+        
         int states_quantity = 0;
         int transitions_quantity = 0;
         std::list<int> final_states;
@@ -35,57 +42,56 @@ int main()
             {
             case 0:
                 states_quantity = std::stoi(line);
-                continue;
+                break;
             
             case 1:
-                std::string final_states_list;
-
-                for (char state : final_states_list)
+                for (char state : line)
                 {
                     final_states.push_back(std::stoi(&state));
                 }
             
-                continue;
+                break;
             
             case 2:
                 alphabet = line;
-                continue;
+                break;
             
             case 3:
                 transitions_quantity = std::stoi(line);
-                continue;
+                break;
             
-            default: break;
+            default:
+                if (transitions_quantity > 0)
+                {
+                    transitions.push_back(line);
+                    transitions_quantity--;
+                }
+
+                else
+                {
+                    word = line;
+                }
+
+                break;
             }
-
-            if (transitions_quantity != 0)
-            {
-                transitions.push_back(line);
-                transitions_quantity--;
-
-                continue;
-            }
-
-            word = line;
         }
 
-        std::list<state> states;
+        machine new_machine(states_quantity, alphabet, transitions, final_states);
 
-        for (int j = 0; j < states_quantity; ++j)
+        if (new_machine.check_word(word))
         {
-            auto is_final = std::find(final_states.begin(), final_states.end(), j+1);
-            state new_state(j+1, is_final != final_states.end());
-            states.push_back(new_state);
+            std::cout << "Accepted word" << '\n';
         }
-
-        machine new_machine(states, alphabet,);
+        else
+        {
+            std::cout << "Rejected word" << '\n';
+        }
     }
 
-
-    std::for_each(fsm_list.begin(), fsm_list.end(), [](std::ifstream fsm)
+    for (auto& fsm : fsm_list)
     {
         fsm.close();
-    });
+    }
     
     return 0;
 }

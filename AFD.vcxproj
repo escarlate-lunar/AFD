@@ -156,11 +156,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="machine.cpp" />
-    <ClCompile Include="state.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="machine.h" />
-    <ClInclude Include="state.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="automata1.txt" />
+    <Content Include="automata2.txt" />
+    <Content Include="automata3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

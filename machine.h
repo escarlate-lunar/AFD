@@ -2,24 +2,17 @@
 #include <list>
 #include <string>
 
-#include "state.h"
-
-struct transition
-{
-    int initial_state;
-    char symbol;
-    int final_state;
-};
-
 class machine
 {
     std::string alphabet_;
-    state current_state_;
-    std::list<state> states_;
-    std::list<transition> transitions_;
+    int current_state_;
+    int state_quantity_;
+    std::list<int> final_states_;
+    std::list<std::string> transitions_;
 
 public:
-    machine(std::list<state> states, const std::string& alphabet, const std::list<transition>& transitions);
+    machine(int state_quantity, const std::string& alphabet, const std::list<std::string>& transitions, const std::list<int>& final_states);
     bool check_word(const std::string& word);
     bool transition_function(char symbol);
+    bool is_out_of_bounds(int number) const;
 };

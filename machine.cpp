@@ -1,20 +1,32 @@
 #include "machine.h"
 
 #include <algorithm>
-#include <utility>
+#include <iostream>
 
-machine::machine(std::list<state> states, const std::string& alphabet, const std::list<transition>& transitions):
-    current_state_(NULL, NULL) //initializing variable
+machine::machine
+(const int state_quantity, const std::string& alphabet, const std::list<std::string>& transitions, const std::list<int>& final_states)
 {
     alphabet_ = alphabet;
-    current_state_ = states.front();
-    states_ = std::move(states);
-    transitions_ = (transitions);
+    current_state_ = 1;
+    state_quantity_ = state_quantity;
+    final_states_ = final_states;
+    transitions_ = transitions;
+
+    std::cout << alphabet << '\n';
+    std::cout << current_state_ << '\n';
+    std::cout << state_quantity << '\n';
 }
 
 bool machine::check_word(const std::string& word)
 {
-    for (char symbol : word)
+    std::cout << word << '\n';
+    
+    if (transitions_.empty())
+    {
+        return false;
+    }
+        
+    for (const char symbol : word)
     {
         if (alphabet_.find(symbol) == std::string::npos)
         {
@@ -27,8 +39,11 @@ bool machine::check_word(const std::string& word)
         }
     }
 
-    if (current_state_.get_is_final() == true)
+    const bool is_final = find(final_states_.begin(), final_states_.end(), current_state_) != final_states_.end();
+    
+    if (is_final)
     {
+        std::cout << current_state_ << '\n';
         return true;
     }
 
@@ -37,27 +52,24 @@ bool machine::check_word(const std::string& word)
 
 bool machine::transition_function(const char symbol)
 {
-    for (transition element : transitions_)
+    for (const std::string& element : transitions_)
     {
-        if (element.initial_state == current_state_.get_identifier() && element.symbol == symbol)
+        if (is_out_of_bounds(element[0]) || is_out_of_bounds(element[2]))
         {
-            /*
-            TODO: return final state to current state
-             
-            auto it = std::find(states_.begin(), states_.end(), [element, this](const state s)
-            {
-                if (s.get_identifier() == element.final_state)
-                {
-                    return s;     
-                }
-            });
-
-            current_state
-            
+            return false;
+        }
+        
+        if (element[0] == current_state_ && element[1] == symbol)
+        {
+            current_state_ = std::stoi(element.substr(2));
             return true;
-            */
         }
     }
 
     return false;
+}
+
+bool machine::is_out_of_bounds(const int number) const
+{
+    return number < 1 || number > state_quantity_;
 }
