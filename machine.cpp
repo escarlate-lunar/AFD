@@ -11,29 +11,23 @@ machine::machine
     state_quantity_ = state_quantity;
     final_states_ = final_states;
     transitions_ = transitions;
-
-    std::cout << alphabet << '\n';
-    std::cout << current_state_ << '\n';
-    std::cout << state_quantity << '\n';
 }
 
 bool machine::check_word(const std::string& word)
 {
-    std::cout << word << '\n';
-    
-    if (transitions_.empty())
+    if (transitions_.empty())                                  //checks for transitions 
     {
         return false;
     }
         
     for (const char symbol : word)
     {
-        if (alphabet_.find(symbol) == std::string::npos)
+        if (alphabet_.find(symbol) == std::string::npos)        //checks if the letter is on the alphabet
         {
             return false;
         }
         
-        if (transition_function(symbol) == false)
+        if (transition_function(symbol) == false)               //checks if its possible to transition
         {
             return false;
         }
@@ -41,9 +35,8 @@ bool machine::check_word(const std::string& word)
 
     const bool is_final = find(final_states_.begin(), final_states_.end(), current_state_) != final_states_.end();
     
-    if (is_final)
+    if (is_final)                                                //checks for final state
     {
-        std::cout << current_state_ << '\n';
         return true;
     }
 

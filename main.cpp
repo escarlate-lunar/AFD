@@ -9,11 +9,12 @@
 
 
 int main()
-{
+{   //opening archives
     std::ifstream finite_state_machine1("automata1.txt");
     std::ifstream finite_state_machine2("automata2.txt");
     std::ifstream finite_state_machine3("automata3.txt");
 
+    //putting them on array
     std::array<std::ifstream, 3> fsm_list =
     {
         (std::move(finite_state_machine1)),
@@ -23,7 +24,7 @@ int main()
 
     for (auto& state_machine : fsm_list)
     {
-        if (!state_machine.is_open())
+        if (!state_machine.is_open()) //checking for fail at opening file
         {
             std::cerr << "Failed to open file" << '\n';
             continue;
@@ -40,11 +41,11 @@ int main()
         {
             switch (i)
             {
-            case 0:
+            case 0: //reads quantity of states
                 states_quantity = std::stoi(line);
                 break;
             
-            case 1:
+            case 1: //reads which states are final
                 for (char state : line)
                 {
                     final_states.push_back(std::stoi(&state));
@@ -52,22 +53,22 @@ int main()
             
                 break;
             
-            case 2:
+            case 2: //reads the alphabet characters
                 alphabet = line;
                 break;
             
-            case 3:
+            case 3: //reads the quantity of transitions
                 transitions_quantity = std::stoi(line);
                 break;
             
             default:
-                if (transitions_quantity > 0)
+                if (transitions_quantity > 0) //the next lines will be read as transitions till countdown
                 {
                     transitions.push_back(line);
                     transitions_quantity--;
                 }
 
-                else
+                else //gets the word at the end
                 {
                     word = line;
                 }
@@ -76,9 +77,9 @@ int main()
             }
         }
 
-        machine new_machine(states_quantity, alphabet, transitions, final_states);
+        machine new_machine(states_quantity, alphabet, transitions, final_states); //creates automata
 
-        if (new_machine.check_word(word))
+        if (new_machine.check_word(word)) //checks if it is a valid word
         {
             std::cout << "Accepted word" << '\n';
         }
@@ -88,7 +89,7 @@ int main()
         }
     }
 
-    for (auto& fsm : fsm_list)
+    for (auto& fsm : fsm_list) //closes archives
     {
         fsm.close();
     }
