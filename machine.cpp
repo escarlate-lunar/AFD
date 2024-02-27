@@ -15,7 +15,7 @@ machine::machine
 
 bool machine::check_word(const std::string& word)
 {
-    if (transitions_.empty())                                  //checks for transitions 
+    if (transitions_.empty())                                   //checks for transitions 
     {
         return false;
     }
